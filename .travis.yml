@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t ryanb/react-test -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run --env CI=true ryanb/react-test npm test -- --coverage
+
+after_success:
+  - docker build -t rdb522/multi-client ./client
+  - docker build -t rdb522/multi-nginx ./nginx
+  - docker build -t rdb522/multi-server ./server
+  - docker build -t rdb522/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Push images to docker hub
+  - docker push rdb522/multi-client
+  - docker push rdb522/multi-nginx
+  - docker push rdb522/multi-server
+  - docker push rdb522/multi-worker
