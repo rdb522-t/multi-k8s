@@ -11,6 +11,6 @@ docker push rdb522/multi-server:$SHA
 docker push rdb522/multi-worker:$SHA
 
 kubectl apply -f k8s
-kubectl set image deployments/client-deployment server=rdb522/multi-client:$SHA
 kubectl set image deployments/server-deployment server=rdb522/multi-server:$SHA
+kubectl set image deployments/client-deployment server=rdb522/multi-client:$SHA
 kubectl set image deployments/worker-deployment server=rdb522/multi-worker:$SHA
